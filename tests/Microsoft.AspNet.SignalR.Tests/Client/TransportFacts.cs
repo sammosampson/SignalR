@@ -156,10 +156,12 @@ namespace Microsoft.AspNet.SignalR.Tests
                 .Returns(tcs.Task);
 
             var autoTransport = new AutoTransport(httpClient.Object, transports);
-
             autoTransport.Negotiate(new Connection("http://foo", string.Empty), string.Empty).Wait();
 
-            Assert.False(transports.Contains(new WebSocketTransport()));
+            foreach (IClientTransport transport in transports)
+            {
+                Assert.IsNotType(typeof(WebSocketTransport), transport);
+            }
         }
 
         [Fact]

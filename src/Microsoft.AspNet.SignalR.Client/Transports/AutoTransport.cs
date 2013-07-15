@@ -73,7 +73,13 @@ namespace Microsoft.AspNet.SignalR.Client.Transports
             {
                 if (!response.TryWebSockets)
                 {
-                    _transports.Remove(new WebSocketTransport());
+                    foreach (IClientTransport transport in _transports)
+                    {
+                        if (transport.Name == "webSockets")
+                        {
+                            _transports.Remove(transport);
+                        }
+                    }
                 }
 
                 return response;
